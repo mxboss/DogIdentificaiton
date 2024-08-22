@@ -416,7 +416,7 @@ import copy
 optimizer = torch.optim.Adam(model.parameters(), lr=1e-4)
 loss_fn = nn.CrossEntropyLoss()  # 创建损失函数
 
-epochs = 0
+epochs = 10
 
 train_loss = []
 train_acc = []
@@ -428,7 +428,7 @@ best_acc = 0  # 设置一个最佳准确率，作为最佳模型的判别指标
 for epoch in range(epochs):
     # 更新学习率（使用自定义学习率时使用）
     # adjust_learning_rate(optimizer, epoch, learn_rate)
-    print("第"+epoch+"轮训练已开始，请等待...");
+    print("第"+str(epoch+1)+"轮训练已开始，请等待...");
     model.train()
     epoch_train_acc, epoch_train_loss = train(train_dl, model, loss_fn, optimizer)
     # scheduler.step() # 更新学习率（调用官方动态学习率接口时使用）
@@ -449,13 +449,14 @@ for epoch in range(epochs):
     # 获取当前的学习率
     lr = optimizer.state_dict()['param_groups'][0]['lr']
 
-    print("第" + epoch + "轮训练已完毕!");
+    print("第" + str(epoch+1) + "轮训练已完毕!");
     template = ('Epoch:{:2d}, Train_acc:{:.1f}%, Train_loss:{:.3f}, Lr:{:.2E}')
     print(template.format(epoch + 1, epoch_train_acc * 100, epoch_train_loss, lr))
 
-# 保存最佳模型到文件中
-PATH = './best_model.pth'  # 保存的参数文件名
-torch.save(model.state_dict(), PATH)
+if epochs>0 :
+    # 保存最佳模型到文件中
+    PATH = './best_model.pth'  # 保存的参数文件名
+    torch.save(model.state_dict(), PATH)
 
 print('Done')
 
